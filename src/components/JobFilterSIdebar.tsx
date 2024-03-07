@@ -6,11 +6,10 @@ import Select from './ui/select'
 import { Button } from './ui/button'
 import { JobFilterValues, jobFilterSchema } from '@/lib/validation'
 import { redirect } from 'next/navigation'
+import FormSubmitButton from './FormSubmitButton'
 
 
-type JobFilterSideBar = {
-    defaultValues:JobFilterValues;
-}
+
 
 
 
@@ -28,10 +27,16 @@ async function filterJobs(formData:FormData){
         ...(remote && {remote:"true"}),
     })
 
+    // console.log(searchParams);
+    
+
     redirect(`/?${searchParams.toString()}`)
     
 }
 
+interface JobsFilterSidebarProps {
+    defaultValues: JobFilterValues
+}
 export const jobFilterSidebar = async () => {
     const distinctLocations = await prisma?.job.findMany({
         where:{approved:true},
@@ -43,7 +48,7 @@ export const jobFilterSidebar = async () => {
     return distinctLocations
 }
 
-const JobFilterSIdebar = async ({defaultValues}:JobFilterSideBar) => {
+const JobFilterSIdebar = async ({defaultValues}:JobsFilterSidebarProps) => {
 
     const distinctLocations:string[]= await jobFilterSidebar()
     // console.log(distinctLocations);
@@ -51,7 +56,8 @@ const JobFilterSIdebar = async ({defaultValues}:JobFilterSideBar) => {
   return (
     <aside className='p-4 md:w-[260px] sticky top-0 h-fit bg-background border rounded-lg '>
         
-        <form action={filterJobs}>
+        <form action={filterJobs} key={JSON.stringify(defaultValues)}>
+            {/* key here is used to reload the form ones the defaultValues changes in the url params so that the filterSidebar also becomes same as url params */}
             <div className='space-y-4'>
                 <div className='flex flex-col gap-2'>
                     <Label htmlFor='q'>Search</Label>
@@ -84,18 +90,19 @@ const JobFilterSIdebar = async ({defaultValues}:JobFilterSideBar) => {
                     <input
                         type='checkbox'
                         // defaultValue={defaultValues?.remote || ""}
-                        checked={defaultValues?.remote}
+                        // checked={defaultValues?.remote}
                         name='remote'
                         id='remote'
+                        defaultChecked={defaultValues?.remote}
                         className='scale-125 accent-black'
                     />
                     <label htmlFor="remote">
                         Remote Jobs
                     </label>
                 </div>
-                <Button type='submit' className='w-full'>
+                <FormSubmitButton type='submit' className='w-full'>
                     Filter Jobs
-                </Button>
+                </FormSubmitButton>
             </div>
         </form>
     </aside>

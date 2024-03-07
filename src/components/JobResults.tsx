@@ -9,11 +9,11 @@ type JobResultsProps = {
 }
 
 
-  // console
 
 const JobResults = async ({filterValues:{q,type,remote,location}}:JobResultsProps) => {
 
   const searchString = q?.split(" ").filter((word) => word.length > 0).join(" & ")
+  
 
 
   const searchFilter: Prisma.JobWhereInput = searchString 
