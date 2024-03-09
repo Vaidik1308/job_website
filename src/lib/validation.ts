@@ -1,5 +1,5 @@
 
-import {string, z} from 'zod'
+import {z} from 'zod'
 import { jobTypes, locationType } from './job-types'
 
 const requiredString = z.string().min(1,"Required")
