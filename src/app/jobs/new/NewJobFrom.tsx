@@ -10,6 +10,7 @@ import Select from "@/components/ui/select"
 import { jobTypes, locationType } from "@/lib/job-types"
 import LocationInput from "@/components/LocationInput"
 import { X } from "lucide-react"
+import { Label } from "@/components/ui/label"
 
 type Props = {}
 
@@ -180,6 +181,51 @@ const NewJobFrom = (props: Props) => {
                         </FormItem>
                     )}
                 />
+                <div className="space-y-2 ">
+                    <Label htmlFor="applicationEmail">
+                        How to apply
+                    </Label>
+                    <div className="flex justify-between gap-2">
+                        <FormField
+                            control={control}
+                            name="applicationEmail"
+                            render={({field}) => (
+                                <FormItem className="grow">
+                                    <FormControl>
+                                        <Input
+                                            id="applicationEmail"
+                                            placeholder="Email"
+                                            type="email"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+                        <span className="flex items-center">Or</span>
+                        <FormField
+                            control={control}
+                            name="applicationUrl"
+                            render={({field}) => (
+                                <FormItem className="grow">
+                                    <FormControl>
+                                        <Input
+                                            placeholder="Website"
+                                            type="email"
+                                            {...field}
+                                            onChange={(e) => {
+                                                field.onChange(e);
+                                                trigger("applicationEmail")
+                                            }}
+                                        />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+                    </div>                      
+                </div>
             </form>
         </Form>
     </main>
