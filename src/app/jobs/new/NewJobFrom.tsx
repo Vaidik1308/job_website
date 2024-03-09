@@ -11,6 +11,9 @@ import { jobTypes, locationType } from "@/lib/job-types"
 import LocationInput from "@/components/LocationInput"
 import { X } from "lucide-react"
 import { Label } from "@/components/ui/label"
+import RichTextEditor from "@/components/RichTextEditor"
+import { draftToMarkdown } from "markdown-draft-js"
+import LoadingButton from "@/components/LoadingButtonProps"
 
 type Props = {}
 
@@ -136,7 +139,16 @@ const NewJobFrom = (props: Props) => {
                         <FormItem>
                             <FormLabel>Location</FormLabel>
                             <FormControl>
-                                <Select {...field} defaultValue="">
+                                <Select 
+                                    {  ...field} 
+                                    defaultValue=""
+                                    onChange={(e) => {
+                                        field.onChange(e);
+                                        if(e.currentTarget.value === "Remote"){
+                                            trigger("location");
+                                        }
+                                    }}
+                                >
                                     <option value="" hidden>
                                         Select an option
                                     </option>
@@ -203,7 +215,7 @@ const NewJobFrom = (props: Props) => {
                                 </FormItem>
                             )}
                         />
-                        <span className="flex items-center">Or</span>
+                        {/* <span className="flex items-center">Or</span> */}
                         <FormField
                             control={control}
                             name="applicationUrl"
@@ -212,7 +224,7 @@ const NewJobFrom = (props: Props) => {
                                     <FormControl>
                                         <Input
                                             placeholder="Website"
-                                            type="email"
+                                            type="url"
                                             {...field}
                                             onChange={(e) => {
                                                 field.onChange(e);
@@ -226,6 +238,41 @@ const NewJobFrom = (props: Props) => {
                         />
                     </div>                      
                 </div>
+                <FormField
+                    control={control}
+                    name="description"
+                    render={({field}) => (
+                        <FormItem>
+                            <Label onClick={() => setFocus("description")} >Description</Label>
+                            <FormControl>
+                                <RichTextEditor
+                                    onChange={(draft) => field.onChange(draftToMarkdown(draft)) }
+                                    ref={field.ref} // this is required in order to focus through label
+                                />
+                            </FormControl>
+                            <FormMessage/>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={control}
+                    name="salary"
+                    render={({field}) => (
+                        <FormItem>
+                            <FormLabel>Salary</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="number"
+                                    {...field}
+                                />
+                            </FormControl>
+                            <FormMessage/>
+                        </FormItem>
+                    )}
+                />
+                <LoadingButton type="submit" loading={isSubmitting} >
+                    Submit
+                </LoadingButton>
             </form>
         </Form>
     </main>
