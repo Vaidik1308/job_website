@@ -33,8 +33,10 @@ const locationSchema = z.object({
 })
 .refine(
     data => !data.locationType || data.locationType === "Remote" || data.location,
-        "Location is required for the onsite job"
-    
+    {
+        message:"Location is required for the onsite job",
+        path:["location"]
+    }
 )
 
 export const createJobSchema = z.object({

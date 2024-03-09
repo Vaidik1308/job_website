@@ -25,7 +25,7 @@ export default forwardRef<HTMLInputElement, LocationInputProps>( function Locati
     return (
         <div className='relative'>
             <Input
-                type='search'
+                type='text'
                 {...props}
                 ref={ref}
                 value={locationSearchInput}
