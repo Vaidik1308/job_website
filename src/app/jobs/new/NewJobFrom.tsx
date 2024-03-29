@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label"
 import RichTextEditor from "@/components/RichTextEditor"
 import { draftToMarkdown } from "markdown-draft-js"
 import LoadingButton from "@/components/LoadingButtonProps"
+import { createJobPosting } from "./actions"
 
 type Props = {}
 
@@ -23,9 +24,23 @@ const NewJobFrom = (props: Props) => {
     })
 
     async function onSubmit(values:CreateJobValues) {
-        console.log(values);
-        console.table(values)
-        
+        // console.log(values);
+        // console.table(values)
+        const formData = new FormData();
+
+        Object.entries(values).forEach(([key,value]) => {
+            if (value) {
+                formData.append(key,value)
+            }
+        });
+
+        try{
+            await createJobPosting(formData);
+        }catch(error){
+            console.log(error);
+            alert("Something went wrong, Please try again.")
+            
+        }
     }
 
 
@@ -41,7 +56,7 @@ const NewJobFrom = (props: Props) => {
         formState:{isSubmitting}
     } = form
   return (
-    <main className="max-3xl m-auto mt-10 space-y-10">
+    <main className="max-3xl m-auto mt-10 space-y-10 md:w-[75%] md:shadow-lg md:p-2 my-4 ">
         <div className="space-y-5 text-center">
             <H1>Find your perfect developer </H1>
             <p className="text-muted-foreground">
