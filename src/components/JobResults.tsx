@@ -3,6 +3,7 @@ import JobListItem from './JobListItem'
 import prisma from "@/lib/prisma"
 import { JobFilterValues } from '@/lib/validation'
 import { Prisma } from '@prisma/client'
+import Link from 'next/link'
 
 type JobResultsProps = {
   filterValues: JobFilterValues
@@ -47,9 +48,9 @@ const JobResults = async ({filterValues:{q,type,remote,location}}:JobResultsProp
     <div className="space-y-4 grow">
           {jobs && (
             jobs.map((job,i) => (
-              <>
-                <JobListItem key={i} job={job}/>
-              </>
+              <Link key={i} href={`/jobs/${job.slug}`}>
+                <JobListItem  job={job}/>
+              </Link>
             ))
           )}
           {jobs.length === 0 && (
